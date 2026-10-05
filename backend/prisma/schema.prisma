@@ -136,20 +136,21 @@ model RutaSegura {
 }
 
 model AlertaSos {
-  id               Int                @id @default(autoincrement())
-  usuarioId        Int                @map("usuario_id")
-  latitudInicial   Decimal            @map("latitud_inicial") @db.Decimal(10, 8)
-  longitudInicial  Decimal            @map("longitud_inicial") @db.Decimal(11, 8)
-  paisCodigo       String             @map("pais_codigo") @db.Char(2)
-  metodoActivacion MetodoActivacion   @default(BOTON) @map("metodo_activacion")
-  estado           EstadoAlerta       @default(PENDIENTE)
-  atendidaPor      Int?               @map("atendida_por")
-  notasResolucion  String?            @map("notas_resolucion") @db.Text
-  creadoEn         DateTime           @default(now()) @map("creado_en") @db.Timestamptz
-  resueltaEn       DateTime?          @map("resuelta_en") @db.Timestamptz
+  id               Int                  @id @default(autoincrement())
+  usuarioId        Int                  @map("usuario_id")
+  tokenPublico     String               @unique @default(uuid()) @map("token_publico") @db.VarChar(36)
+  latitudInicial   Decimal              @map("latitud_inicial") @db.Decimal(10, 8)
+  longitudInicial  Decimal              @map("longitud_inicial") @db.Decimal(11, 8)
+  paisCodigo       String               @map("pais_codigo") @db.Char(2)
+  metodoActivacion MetodoActivacion     @default(BOTON) @map("metodo_activacion")
+  estado           EstadoAlerta         @default(PENDIENTE)
+  atendidaPor      Int?                 @map("atendida_por")
+  notasResolucion  String?              @map("notas_resolucion") @db.Text
+  creadoEn         DateTime             @default(now()) @map("creado_en") @db.Timestamptz
+  resueltaEn       DateTime?            @map("resuelta_en") @db.Timestamptz
 
-  usuario          Usuario            @relation("UsuarioAlertas", fields: [usuarioId], references: [id], onDelete: Cascade)
-  operador         Usuario?           @relation("OperadorAlertas", fields: [atendidaPor], references: [id], onDelete: SetNull)
+  usuario          Usuario              @relation("UsuarioAlertas", fields: [usuarioId], references: [id], onDelete: Cascade)
+  operador         Usuario?             @relation("OperadorAlertas", fields: [atendidaPor], references: [id], onDelete: SetNull)
   seguimientosGps  SeguimientoGpsVivo[]
   notificaciones   NotificacionEnviada[]
 
