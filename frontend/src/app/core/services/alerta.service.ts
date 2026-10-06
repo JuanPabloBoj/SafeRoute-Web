@@ -1,6 +1,4 @@
 import { Service } from '@angular/core';
 
 @Service()
-export class AlertaService {
-  
-}
+export class AlertaService {}

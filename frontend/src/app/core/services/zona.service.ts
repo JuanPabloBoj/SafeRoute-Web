@@ -1,6 +1,4 @@
 import { Service } from '@angular/core';
 
 @Service()
-export class ZonaService {
-  
-}
+export class ZonaService {}
