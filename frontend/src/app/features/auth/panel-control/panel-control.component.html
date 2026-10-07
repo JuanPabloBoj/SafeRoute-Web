@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <h1 class="page-title">Panel de Control</h1>
+  
+  <div *ngIf="cargando()" class="loading">Cargando métricas...</div>
+
+  <div *ngIf="!cargando() && resumen()" class="metrics-grid">
+    <div class="metric-card">
+      <h3>Contactos SOS</h3>
+      <p class="metric-value">{{ resumen()?.contactos_registrados || 0 }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>Rutas Activas</h3>
+      <p class="metric-value">{{ resumen()?.rutas_activas || 0 }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>Alertas Emitidas</h3>
+      <p class="metric-value">{{ resumen()?.alertas_emitidas || 0 }}</p>
+    </div>
+  </div>
+
+  <div class="dashboard-section" *ngIf="resumen()?.ultima_alerta_fecha">
+    <h2>Última Alerta Registrada</h2>
+    <p>Fecha: {{ resumen()?.ultima_alerta_fecha | date:'medium' }}</p>
+  </div>
+</div>

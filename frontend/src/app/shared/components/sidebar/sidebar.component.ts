@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
-  imports: [],
-  selector: 'app-sidebar.component',
-  styleUrl: './sidebar.component.css',
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  authService = inject(AuthService);
+}

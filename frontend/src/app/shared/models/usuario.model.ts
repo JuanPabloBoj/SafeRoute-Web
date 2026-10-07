@@ -18,18 +18,6 @@ export interface Usuario {
   activo: boolean;
   creado_en?: string;
   actualizado_en?: string;
-  iat?: number;
-  exp?: number;
-}
-
-export interface Autoridad {
-  id: number;
-  nombre: string;
-  pais_codigo: string;
-  email: string;
-  telefono?: string | null;
-  activa: boolean;
-  creado_en?: string;
 }
 
 export interface LoginRequest {
@@ -37,25 +25,36 @@ export interface LoginRequest {
   password_hash: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  usuario: Usuario;
+}
 export interface RegisterRequest {
-  nombre_completo: string;
+  nombreCompleto: string;
   email: string;
   password_hash: string;
   telefono: string;
-  pais_codigo?: string;
+  paisCodigo?: string;
 }
 
-export interface CrearAutoridadRequest {
+export interface RegisterAutoridadRequest {
   nombre: string;
-  pais_codigo: string;
+  paisCodigo: string;
   email: string;
   telefono?: string;
+  activa?: boolean;
 }
 
-export interface ActualizarUsuarioRequest {
+export interface UsuarioActualizar {
   nombre_completo: string;
+  email: string;
   telefono: string;
-  pais_codigo?: string;
+  pais_codigo: string;
+}
+
+export interface CambiarPasswordRequest {
+  password_actual: string;
+  password_nuevo: string;
 }
 
 export interface LoginResponse {
@@ -66,12 +65,4 @@ export interface LoginResponse {
 export interface UsuarioResponse {
   message?: string;
   usuario: Usuario;
-}
-
-export interface UsuariosResponse {
-  usuarios: Usuario[];
-}
-
-export interface AutoridadesResponse {
-  autoridades: Autoridad[];
 }

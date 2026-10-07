@@ -1,0 +1,24 @@
+/* Layout Principal */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Sidebar a la izquierda */
+.sidebar-container {
+  width: 250px;
+  min-width: 250px;
+  background-color: #1e293b;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+/* Área de contenido a la derecha */
+.content-container {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f8fafc;
+  overflow-y: auto;
+}

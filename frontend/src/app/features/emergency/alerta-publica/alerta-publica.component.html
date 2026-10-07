@@ -1,1 +1,48 @@
-<p>alerta-publica.component works!</p>
+<div class="alerta-publica-container">
+  <header class="header-emergencia">
+    <h1 class="titulo-emergencia">
+      <span class="indicador-en-vivo"></span>
+      EMERGENCIA EN TIEMPO REAL
+    </h1>
+    <span class="badge-publico">Público</span>
+  </header>
+
+  <main class="contenido-principal">
+    <!-- Estado de Carga -->
+    <div *ngIf="cargando()" class="loading-box">
+      <div class="spinner"></div>
+      <p>Obteniendo ubicación y estado de la alerta...</p>
+    </div>
+
+    <!-- Mensaje de Error -->
+    <div *ngIf="!cargando() && error()" class="error-banner">
+      <strong>Error: </strong>
+      <span>{{ error() }}</span>
+    </div>
+
+    <!-- Detalle de Alerta y Mapa -->
+    <div *ngIf="!cargando() && alerta()" class="grid-emergencia">
+      <div class="tarjeta-info">
+        <h2>Información del Evento</h2>
+        <div class="datos-lista">
+          <p>
+            <strong>Estado:</strong> 
+            <span class="badge-estado" [ngClass]="alerta()?.estado?.toLowerCase()">
+              {{ alerta()?.estado }}
+            </span>
+          </p>
+          <p><strong>Inicio:</strong> {{ alerta()?.creado_en | date:'medium' }}</p>
+          <p><strong>Método:</strong> {{ alerta()?.metodo_activacion }}</p>
+        </div>
+      </div>
+
+      <div class="tarjeta-mapa">
+        <div id="mapa-alerta-publica" class="mapa-contenedor"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-pagina">
+    <p>Sistema de Monitoreo SOS &copy; 2026</p>
+  </footer>
+</div>

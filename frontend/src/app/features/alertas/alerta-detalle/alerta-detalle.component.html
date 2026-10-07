@@ -1,0 +1,72 @@
+<div class="detalle-container">
+  <div class="detalle-header">
+    <a routerLink="/alertas" class="btn-back">← Volver al listado</a>
+    <h1 class="page-title" *ngIf="alerta()">Alerta SOS #{{ alerta()?.id }}</h1>
+  </div>
+
+  <div *ngIf="cargando()" class="loading">Cargando expediente de la emergencia...</div>
+
+  <div *ngIf="!cargando() && alerta()" class="grid-detalle">
+    
+    <!-- Columna Izquierda: Información e Interactividad -->
+    <div class="columna-info">
+      <div class="card-info">
+        <h2>Metadatos del Evento</h2>
+        <p><strong>Fecha de Emisión:</strong> {{ alerta()?.creado_en | date:'medium' }}</p>
+        <p><strong>Método Activación:</strong> <span class="metodo-tag">{{ alerta()?.metodo_activacion }}</span></p>
+        <p><strong>Código de País:</strong> {{ alerta()?.pais_codigo }}</p>
+        <p><strong>Coordenadas Iniciales:</strong> {{ alerta()?.latitud_inicial }}, {{ alerta()?.longitud_inicial }}</p>
+        
+        <div class="token-box" *ngIf="alerta()?.token_publivo">
+          <small>Token Público de Enlace:</small>
+          <code>{{ alerta()?.token_publivo }}</code>
+        </div>
+      </div>
+
+      <!-- Panel de Gestión de Estado -->
+      <div class="card-gestion">
+        <h2>Gestión de la Incidencia</h2>
+        <form (ngSubmit)="actualizarEstado()">
+          <div class="form-group">
+            <label for="estado">Cambiar Estado:</label>
+            <select id="estado" [(ngModel)]="nuevoEstado" name="estado" class="form-input">
+              <option value="PENDIENTE">PENDIENTE</option>
+              <option value="EN_PROCESO">EN_PROCESO</option>
+              <option value="RESUELTO">RESUELTO</option>
+              <option value="FALSA_ALARMA">FALSA_ALARMA</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="notas">Notas de Resolución / Observaciones:</label>
+            <textarea id="notas" [(ngModel)]="notasResolucion" name="notas" rows="3" class="form-input" placeholder="Detalla las acciones tomadas por la autoridad u operador..."></textarea>
+          </div>
+
+          <button type="submit" [disabled]="guardando()" class="btn-save">
+            {{ guardando() ? 'Guardando...' : 'Actualizar Estado' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Notificaciones Emitidas -->
+      <div class="card-info" *ngIf="alerta()?.notificaciones?.length">
+        <h2>Notificaciones Despachadas</h2>
+        <ul class="notificaciones-list">
+          <li *ngFor="let n of alerta()?.notificaciones">
+            <span>Vía {{ n.metodo }}</span>
+            <span class="badge-envio" [ngClass]="n.estado_envio.toLowerCase()">{{ n.estado_envio }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Mapa de Rastreo GPS -->
+    <div class="columna-mapa">
+      <div class="card-mapa">
+        <h2>Rastreo de Ubicación en Tiempo Real</h2>
+        <div id="mapa-detalle-alerta" class="mapa-frame"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

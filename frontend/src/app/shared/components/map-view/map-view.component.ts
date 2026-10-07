@@ -1,32 +1,44 @@
-import { Component, AfterViewInit, Input, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapService } from '../../../core/services/map.service';
+import { ZonaRiesgo } from '../../models/zona.model';
+import { RutaSegura } from '../../models/ruta.model';
 
 @Component({
   selector: 'app-map-view',
   standalone: true,
   imports: [CommonModule],
-  template: `<div id="mapContainer" style="width: 100%; height: 100%; min-height: 400px;"></div>`,
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-  `]
+  templateUrl: './map-view.component.html',
+  styleUrls: ['./map-view.component.css']
 })
 export class MapViewComponent implements AfterViewInit, OnDestroy {
-  @Input() lat: number = 14.6349;  // Coordenadas por defecto (Guatemala)
+  private mapService = inject(MapService);
+
+  @Input() containerId: string = 'map-view-container';
+  @Input() lat: number = 14.6349;
   @Input() lng: number = -90.5069;
   @Input() zoom: number = 13;
+  @Input() zonasRiesgo: ZonaRiesgo[] = [];
+  @Input() rutasSeguras: RutaSegura[] = [];
 
-  constructor(private mapService: MapService) {}
+  @Output() mapaListo = new EventEmitter<void>();
 
   ngAfterViewInit(): void {
-    this.mapService.initMap('mapContainer', this.lat, this.lng, this.zoom);
+    setTimeout(() => {
+      this.mapService.initMap(this.containerId, this.lat, this.lng, this.zoom);
+      
+      if (this.zonasRiesgo.length > 0) {
+        this.mapService.renderZonasRiesgo(this.zonasRiesgo);
+      }
+      if (this.rutasSeguras.length > 0) {
+        this.mapService.renderRutasSeguras(this.rutasSeguras);
+      }
+
+      this.mapaListo.emit();
+    }, 100);
   }
 
   ngOnDestroy(): void {
-    // Liberar recursos al destruir el componente
+    this.mapService.clearAll();
   }
 }

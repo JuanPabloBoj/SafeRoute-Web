@@ -1,9 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ContactoService } from '../../../core/services/contacto.service';
+import { ContactoEmergencia } from '../../../shared/models/contacto.model';
 
 @Component({
-  imports: [],
-  selector: 'app-contacto-list.component',
-  styleUrl: './contacto-list.component.css',
+  selector: 'app-contacto-list',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './contacto-list.component.html',
+  styleUrls: ['./contacto-list.component.css']
 })
-export class ContactoListComponent {}
+export class ContactoListComponent implements OnInit {
+  private readonly contactoService = inject(ContactoService);
+
+  contactos = signal<ContactoEmergencia[]>([]);
+  readonly cargando = signal<boolean>(true);
+
+  ngOnInit(): void {
+    this.cargarContactos();
+  }
+
+  cargarContactos(): void {
+    this.contactoService.getContacto().subscribe({
+      next: (res: any) => {
+        this.contactos = Array.isArray(res) ? res : (res.data || [])
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  eliminarContacto(id: number): void {
+    if (confirm('¿Deseas eliminar este contacto de emergencia?')) {
+      this.contactoService.deleteContacto(id).subscribe(() => this.cargarContactos());
+    }
+  }
+}

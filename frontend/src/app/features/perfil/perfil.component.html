@@ -1,0 +1,20 @@
+<div class="form-container">
+  <h1 class="form-title">Mi Perfil</h1>
+  <div class="profile-card" *ngIf="authService.currentUsuario(); else noUser">
+    <div class="form-group">
+      <label>Nombre Completo</label>
+      <input type="text" [value]="authService.currentUsuario()?.nombre_completo" class="form-input" readonly>
+    </div>
+    <div class="form-group">
+      <label>Correo Electrónico</label>
+      <input type="email" [value]="authService.currentUsuario()?.email" class="form-input" readonly>
+    </div>
+    <div class="form-group">
+      <label>Teléfono</label>
+      <input type="text" [value]="authService.currentUsuario()?.telefono || 'No registrado'" class="form-input" readonly>
+    </div>
+  </div>
+  <ng-template #noUser>
+    <p>No hay información de sesión activa.</p>
+  </ng-template>
+</div>

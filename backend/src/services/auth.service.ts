@@ -14,12 +14,29 @@ export class AuthService {
     }
 
     let rolId = data.rolId;
+
     if (!rolId) {
-      const rolUsuario = await db.rol.findUnique({ where: { nombreRol: 'USUARIO' } });
-      rolId = rolUsuario ? rolUsuario.id : 2;
+      // Cerca prima il ruolo standard 'USUARIO'
+      const rolUsuario = await db.rol.findFirst({
+        where: { nombreRol: { equals: 'USUARIO', mode: 'insensitive' } },
+      });
+
+      if (rolUsuario) {
+        rolId = rolUsuario.id;
+      } else {
+        // Fallback: prende il primo ruolo disponibile nel DB se 'USUARIO' non esiste
+        const primerRol = await db.rol.findFirst();
+        if (!primerRol) {
+          throw {
+            statusCode: 500,
+            message: 'No existen roles configurados en la base de datos.',
+          };
+        }
+        rolId = primerRol.id;
+      }
     }
 
-    const hashedPassword = await hashPassword(data.password);
+    const hashedPassword = await hashPassword(data.password_hash);
 
     const nuevoUsuario = await db.usuario.create({
       data: {
@@ -62,7 +79,7 @@ export class AuthService {
       throw { statusCode: 401, message: 'Credenciales inválidas o usuario inactivo.' };
     }
 
-    const passwordValido = await comparePassword(data.password, usuario.passwordHash);
+    const passwordValido = await comparePassword(data.password_hash, usuario.passwordHash);
     if (!passwordValido) {
       throw { statusCode: 401, message: 'Credenciales inválidas.' };
     }

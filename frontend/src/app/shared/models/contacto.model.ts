@@ -8,14 +8,7 @@ export interface ContactoEmergencia {
   creado_en?: string;
 }
 
-export interface CrearContactoRequest {
-  nombre: string;
-  parentesco: string;
-  telefono: string;
-  email_notificacion?: string;
-}
-
-export interface ActualizarContactoRequest {
+export interface ContactoData{
   nombre: string;
   parentesco: string;
   telefono: string;
@@ -23,7 +16,6 @@ export interface ActualizarContactoRequest {
 }
 
 export interface ContactoResponse {
-  message?: string;
   contacto: ContactoEmergencia;
 }
 

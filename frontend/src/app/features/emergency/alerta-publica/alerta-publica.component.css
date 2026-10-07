@@ -1,0 +1,144 @@
+.alerta-publica-container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header-emergencia {
+  background-color: #dc2626;
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titulo-emergencia {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.indicador-en-vivo {
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulso 1.5s infinite;
+}
+
+@keyframes pulso {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.badge-publico {
+  background-color: #ffffff;
+  color: #dc2626;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.contenido-principal {
+  margin: 1.5rem 0;
+  flex-grow: 1;
+}
+
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  color: #4b5563;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid #e5e7eb;
+  border-top-color: #dc2626;
+  border-radius: 50%;
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.error-banner {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 0.375rem;
+}
+
+.grid-emergencia {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid-emergencia {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.tarjeta-info, .tarjeta-mapa {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tarjeta-info h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.datos-lista p {
+  margin: 0.75rem 0;
+  color: #374151;
+}
+
+.badge-estado {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-estado.activa { background-color: #fee2e2; color: #991b1b; }
+.badge-estado.atendida { background-color: #dcfce7; color: #166534; }
+
+.mapa-contenedor {
+  width: 100%;
+  min-height: 400px;
+  border-radius: 0.375rem;
+}
+
+.footer-pagina {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}

@@ -1,1 +1,35 @@
-<p>contacto-list.component works!</p>
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Contactos de Emergencia</h1>
+    <a routerLink="/contactos/nuevo" class="btn-success">+ Agregar Contacto</a>
+  </div>
+
+  <div *ngIf="cargando()" class="loading">Obteniendo contactos...</div>
+
+  <div *ngIf="!cargando()" class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Relación</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of contactos()">
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.parentesco || 'No especificada' }}</td>
+          <td>{{ c.telefono }}</td>
+          <td class="actions-cell">
+            <a [routerLink]="['/contactos/editar', c.id]" class="btn-link">Editar</a>
+            <button (click)="eliminarContacto(c.id)" class="btn-delete">Eliminar</button>
+          </td>
+        </tr>
+        <tr *ngIf="contactos().length === 0">
+          <td colspan="4" class="empty-cell">No hay contactos de emergencia registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

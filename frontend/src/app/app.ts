@@ -1,12 +1,20 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { CommonModule } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, SidebarComponent],
   templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('frontend');
+  private readonly router = inject(Router);
+
+  esRutaAutenticacion(): boolean {
+    const url = this.router.url;
+    return url.includes('/login') || url.includes('/register');
+  }
 }
