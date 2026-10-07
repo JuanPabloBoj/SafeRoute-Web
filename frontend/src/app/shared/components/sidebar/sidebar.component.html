@@ -1,36 +1,37 @@
-<aside class="sidebar-wrapper">
-  <div class="sidebar-section">
-    <div class="sidebar-header">Menú Principal</div>
-    <nav class="sidebar-nav">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">📊</span> Dashboard
-      </a>
-      <a routerLink="/contactos" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">👥</span> Contactos SOS
-      </a>
-      <a routerLink="/rutas-seguras" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">🗺️</span> Rutas Seguras
-      </a>
-      <a routerLink="/reportes" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">📝</span> Reportes
-      </a>
-
-      <!-- Accesos para Operadores o Administradores -->
-      <ng-container *ngIf="authService.hasRole(['OPERADOR', 'ADMIN'])">
-        <div class="sidebar-header mt-sep">Administración</div>
-        <a routerLink="/monitoreo" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">📡</span> Monitoreo GPS
-        </a>
-        <a routerLink="/zonas-riesgo" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">⚠️</span> Zonas de Riesgo
-        </a>
-      </ng-container>
-    </nav>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <span class="menu-title">MENÚ PRINCIPAL</span>
   </div>
 
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active">
+          <span class="icon">📊</span> Dashboard
+        </a>
+      </li>
+      <li>
+        <a routerLink="/contactos-sos" routerLinkActive="active">
+          <span class="icon">👥</span> Contactos SOS
+        </a>
+      </li>
+      <li>
+        <a routerLink="/rutas-seguras" routerLinkActive="active">
+          <span class="icon">🗺️</span> Rutas Seguras
+        </a>
+      </li>
+      <li>
+        <a routerLink="/reportes" routerLinkActive="active">
+          <span class="icon">📝</span> Reportes
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Botón de Cerrar Sesión agregado al pie del menú -->
   <div class="sidebar-footer">
-    <a routerLink="/perfil" routerLinkActive="active" class="nav-item">
-      <span class="nav-icon">⚙️</span> Mi Perfil
-    </a>
+    <button (click)="logout()" class="btn-logout">
+      <span class="icon">🚪</span> Cerrar Sesión
+    </button>
   </div>
 </aside>

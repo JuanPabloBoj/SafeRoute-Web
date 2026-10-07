@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.use(authenticateJWT, authorizeRoles('USUARIO'));
+router.use(authenticateJWT);
 
 router.get('/', obtenerContactos);
 router.get('/:id', validate(idParamSchema, 'params'), obtenerContacto);
