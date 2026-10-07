@@ -25,7 +25,7 @@ export class GeolocationService {
           resolve(coords);
         },
         (err) => reject(err),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
       );
     });
   }
@@ -49,7 +49,7 @@ export class GeolocationService {
           observer.next(dto);
         },
         (err) => observer.error(err),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 }
       );
 
       return () => this.detenerTracking();

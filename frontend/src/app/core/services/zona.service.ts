@@ -2,15 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ZonaRiesgoData, ZonaRiesgoResponse, ZonasRiesgoResponse
-} from '../../shared/models/zona.model';
+import { ZonaRiesgoData, ZonaRiesgoResponse, ZonasRiesgoResponse } from '../../shared/models/zona.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ZonaRiesgoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/zonas-riesgo`;
+  private readonly apiUrl = `${environment.apiUrl}/zonas`;
 
   getZonasRiesgo(): Observable<ZonasRiesgoResponse> {
     return this.http.get<ZonasRiesgoResponse>(this.apiUrl);

@@ -5,7 +5,7 @@ import * as zonaController from '../controller/zona.controller';
 
 const router = Router();
 
-router.get('/', authenticateJWT, zonaController.listarZonas);
+router.get('/', zonaController.listarZonas);
 
 router.post('/', authenticateJWT, authorizeRoles('OPERADOR', 'ADMIN'), zonaController.crearZona);
 router.put('/:id', authenticateJWT, authorizeRoles('OPERADOR', 'ADMIN'), zonaController.actualizarZona);

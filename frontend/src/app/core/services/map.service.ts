@@ -44,6 +44,12 @@ export class MapService {
     this.routesGroup.clearLayers();
   }
 
+invalidateSize(): void {
+  if (this.map) {
+    this.map.invalidateSize();
+  }
+}
+
   //Dibuja Polígonos de Zonas de Riesgo según su nivel ('VERDE', 'AMARILLO', 'ROJO')
   renderZonasRiesgo(zonas: ZonaRiesgo[]): void {
     this.zonesGroup.clearLayers();
