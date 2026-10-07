@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Historial de Alertas SOS</h1>
+  </div>
+
+  <div *ngIf="cargando()" class="loading">Cargando registro de alertas...</div>
+
+  <div *ngIf="!cargando()" class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Método</th>
+          <th>Estado</th>
+          <th>Coordenadas Iniciales</th>
+          <th>Fecha Activación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of alertas()">
+          <td>#{{ a.id }}</td>
+          <td>
+            <span class="metodo-tag">{{ a.metodo_activacion }}</span>
+          </td>
+          <td>
+            <span class="badge-estado" [ngClass]="a.estado.toLowerCase()">
+              {{ a.estado }}
+            </span>
+          </td>
+          <td>{{ a.latitud_inicial }}, {{ a.longitud_inicial }}</td>
+          <td>{{ a.creado_en | date:'medium' }}</td>
+          <td>
+            <a [routerLink]="['/alertas/detalle', a.id]" class="btn-link">Ver Detalle</a>
+          </td>
+        </tr>
+        <tr *ngIf="alertas().length === 0">
+          <td colspan="6" class="empty-cell">No se registra ninguna alerta SOS en el sistema.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

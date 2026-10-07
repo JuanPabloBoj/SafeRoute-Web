@@ -1,0 +1,10 @@
+<div *ngIf="!esRutaAutenticacion()" class="app-container">
+  <app-sidebar class="sidebar-container"></app-sidebar>
+  <main class="content-container">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<div *ngIf="esRutaAutenticacion()" class="auth-container">
+  <router-outlet></router-outlet>
+</div>

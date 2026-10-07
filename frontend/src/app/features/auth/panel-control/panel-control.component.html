@@ -1,0 +1,47 @@
+<div class="dashboard-container">
+
+  @if (esAdminOAutoridad) {
+    <header class="dashboard-header">
+      <h1 class="page-title">Panel de Control</h1>
+      <p class="subtitle">Resumen ejecutivo del sistema y monitoreo de emergencias</p>
+    </header>
+
+    @if (cargando) {
+      <div class="loading-state">
+        <p>Procesando muestras de datos del servidor...</p>
+      </div>
+    } @else {
+      <div class="metrics-grid">
+        <section class="card-section">
+          <h2 class="section-title">Alertas S.O.S.</h2>
+          <div class="cards-wrapper">
+            <div class="metric-card"><span class="card-label">Total Alertas</span><span class="card-value">{{ metricasAlertas?.total ?? 0 }}</span></div>
+            <div class="metric-card warning"><span class="card-label">Pendientes</span><span class="card-value">{{ metricasAlertas?.pendientes ?? 0 }}</span></div>
+            <div class="metric-card info"><span class="card-label">En Proceso</span><span class="card-value">{{ metricasAlertas?.enProceso ?? 0 }}</span></div>
+            <div class="metric-card success"><span class="card-label">Resueltas</span><span class="card-value">{{ metricasAlertas?.resueltas ?? 0 }}</span></div>
+          </div>
+        </section>
+
+        <section class="card-section">
+          <h2 class="section-title">Estado del Sistema</h2>
+          <div class="cards-wrapper">
+            <div class="metric-card primary"><span class="card-label">Usuarios Activos</span><span class="card-value">{{ metricasSistema?.usuariosActivos ?? 0 }}</span></div>
+            <div class="metric-card danger"><span class="card-label">Zonas Mapeadas</span><span class="card-value">{{ metricasSistema?.zonasMapeadas ?? 0 }}</span></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="map-section" style="margin-top: 2rem;">
+        <app-mapa-principal></app-mapa-principal>
+      </div>
+    }
+  }
+
+  @else {
+    <div class="user-map-view">
+      <h1 class="page-title">Mapa de Navegación Segura</h1>
+      <app-mapa-principal></app-mapa-principal>
+    </div>
+  }
+
+</div>

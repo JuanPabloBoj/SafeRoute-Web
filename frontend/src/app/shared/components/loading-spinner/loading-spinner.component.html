@@ -1,0 +1,4 @@
+<div [ngClass]="{'fullscreen-spinner': pantallaCompleta, 'inline-spinner': !pantallaCompleta}">
+  <div class="spinner-circle"></div>
+  <p *ngIf="texto" class="spinner-texto">{{ texto }}</p>
+</div>

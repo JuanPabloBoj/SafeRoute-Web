@@ -1,0 +1,36 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Zonas de Riesgo</h1>
+    <a routerLink="/zonas-riesgo/nueva" class="btn-success">+ Nueva Zona</a>
+  </div>
+
+  <div *ngIf="cargando()" class="loading">Cargando zonas de riesgo...</div>
+
+  <div *ngIf="!cargando()" class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nombre Zona</th>
+          <th>Nivel Riesgo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let z of zonas()">
+          <td>{{ z.nombre_zona }}</td>
+          <td>
+            <span class="badge-risk" [ngClass]="z.nivel_riesgo.toLowerCase()">
+              {{ z.nivel_riesgo }}
+            </span>
+          </td>
+          <td>
+            <a [routerLink]="['/zonas-riesgo/editar', z.id]" class="btn-link">Editar</a>
+          </td>
+        </tr>
+        <tr *ngIf="zonas().length === 0">
+          <td colspan="3" class="empty-cell">No se han delimitado zonas de riesgo.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

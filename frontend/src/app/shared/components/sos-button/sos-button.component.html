@@ -1,0 +1,15 @@
+<div class="sos-floating-container">
+  <button 
+    (click)="dispararSOS()" 
+    [disabled]="enProceso()"
+    class="btn-sos-trigger">
+    
+    <span *ngIf="!enProceso()" class="sos-pulse-effect"></span>
+    
+    <span *ngIf="!enProceso()" class="sos-text">{{ texto }}</span>
+    
+    <span *ngIf="enProceso()" class="sos-loading-text">
+      Transmitiendo...
+    </span>
+  </button>
+</div>

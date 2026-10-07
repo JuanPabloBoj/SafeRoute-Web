@@ -1,0 +1,10 @@
+.page-container { padding: 1rem; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.page-title { font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0; }
+.btn-success { background-color: #16a34a; color: #ffffff; padding: 0.5rem 1rem; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; }
+.btn-success:hover { background-color: #15803d; }
+.table-container { background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; text-align: left; }
+.data-table th, .data-table td { padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; }
+.data-table th { background-color: #f9fafb; font-size: 0.75rem; text-transform: uppercase; color: #6b7280; }
+.btn-link { color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.875rem; }

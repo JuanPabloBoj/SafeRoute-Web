@@ -1,0 +1,191 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ENUMS
+enum NivelRiesgo {
+  VERDE
+  AMARILLO
+  ROJO
+}
+
+enum EstadoAlerta {
+  PENDIENTE
+  EN_PROCESO
+  RESUELTO
+  FALSA_ALARMA
+}
+
+enum MetodoActivacion {
+  BOTON
+  VOZ
+}
+
+enum MetodoNotificacion {
+  SMS
+  EMAIL
+  PUSH
+}
+
+enum EstadoEnvio {
+  PENDIENTE
+  ENVIADO
+  FALLIDO
+}
+
+// MODELOS
+model Rol {
+  id          Int       @id @default(autoincrement())
+  nombreRol   String    @unique @map("nombre_rol") @db.VarChar(50)
+  descripcion String?   @db.Text
+  creadoEn    DateTime  @default(now()) @map("creado_en") @db.Timestamptz
+  usuarios    Usuario[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  id                 Int                  @id @default(autoincrement())
+  nombreCompleto     String               @map("nombre_completo") @db.VarChar(150)
+  email              String               @unique @db.VarChar(150)
+  passwordHash       String               @map("password_hash") @db.VarChar(255)
+  telefono           String               @db.VarChar(20)
+  paisCodigo         String               @default("GT") @map("pais_codigo") @db.Char(2)
+  rolId              Int                  @map("rol_id")
+  activo             Boolean              @default(true)
+  creadoEn           DateTime             @default(now()) @map("creado_en") @db.Timestamptz
+  actualizadoEn      DateTime             @default(now()) @updatedAt @map("actualizado_en") @db.Timestamptz
+
+  rol                Rol                  @relation(fields: [rolId], references: [id], onDelete: Restrict)
+  contactos          ContactoEmergencia[]
+  zonasRegistradas   ZonaRiesgo[]
+  rutasSeguras       RutaSegura[]
+  alertasEmitidas    AlertaSos[]          @relation("UsuarioAlertas")
+  alertasAtendidas   AlertaSos[]          @relation("OperadorAlertas")
+
+  @@map("usuarios")
+}
+
+model ContactoEmergencia {
+  id                Int                    @id @default(autoincrement())
+  usuarioId         Int                    @map("usuario_id")
+  nombre            String                 @db.VarChar(150)
+  parentesco        String                 @db.VarChar(50)
+  telefono          String                 @db.VarChar(20)
+  emailNotificacion String?                @map("email_notificacion") @db.VarChar(150)
+  creadoEn          DateTime               @default(now()) @map("creado_en") @db.Timestamptz
+
+  usuario           Usuario                @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  notificaciones    NotificacionEnviada[]
+
+  @@index([usuarioId])
+  @@map("contactos_emergencia")
+}
+
+model Autoridad {
+  id             Int                   @id @default(autoincrement())
+  nombre         String                @db.VarChar(150)
+  paisCodigo     String                @map("pais_codigo") @db.Char(2)
+  email          String                @db.VarChar(150)
+  telefono       String?               @db.VarChar(20)
+  activa         Boolean               @default(true)
+  creadoEn       DateTime              @default(now()) @map("creado_en") @db.Timestamptz
+
+  notificaciones NotificacionEnviada[]
+
+  @@index([paisCodigo])
+  @@map("autoridades")
+}
+
+model ZonaRiesgo {
+  id                    Int         @id @default(autoincrement())
+  nombreZona            String      @map("nombre_zona") @db.VarChar(150)
+  nivelRiesgo           NivelRiesgo @default(AMARILLO) @map("nivel_riesgo")
+  geometriaPolygon      Json        @map("geometria_polygon")
+  descripcionIncidencia String?     @map("descripcion_incidencia") @db.Text
+  registradoPor         Int         @map("registrado_por")
+  creadoEn              DateTime    @default(now()) @map("creado_en") @db.Timestamptz
+
+  usuarioRegistra       Usuario     @relation(fields: [registradoPor], references: [id], onDelete: Restrict)
+
+  @@index([nivelRiesgo])
+  @@map("zonas_riesgo")
+}
+
+model RutaSegura {
+  id              Int      @id @default(autoincrement())
+  usuarioId       Int      @map("usuario_id")
+  nombre          String   @db.VarChar(100)
+  origenLat       Decimal  @map("origen_lat") @db.Decimal(10, 8)
+  origenLng       Decimal  @map("origen_lng") @db.Decimal(11, 8)
+  destinoLat      Decimal  @map("destino_lat") @db.Decimal(10, 8)
+  destinoLng      Decimal  @map("destino_lng") @db.Decimal(11, 8)
+  trayectoGeojson Json?    @map("trayecto_geojson")
+  activa          Boolean  @default(true)
+  creadoEn        DateTime @default(now()) @map("creado_en") @db.Timestamptz
+
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@map("rutas_seguras")
+}
+
+model AlertaSos {
+  id               Int                  @id @default(autoincrement())
+  usuarioId        Int                  @map("usuario_id")
+  tokenPublico     String               @unique @default(uuid()) @map("token_publico") @db.VarChar(36)
+  latitudInicial   Decimal              @map("latitud_inicial") @db.Decimal(10, 8)
+  longitudInicial  Decimal              @map("longitud_inicial") @db.Decimal(11, 8)
+  paisCodigo       String               @map("pais_codigo") @db.Char(2)
+  metodoActivacion MetodoActivacion     @default(BOTON) @map("metodo_activacion")
+  estado           EstadoAlerta         @default(PENDIENTE)
+  atendidaPor      Int?                 @map("atendida_por")
+  notasResolucion  String?              @map("notas_resolucion") @db.Text
+  creadoEn         DateTime             @default(now()) @map("creado_en") @db.Timestamptz
+  resueltaEn       DateTime?            @map("resuelta_en") @db.Timestamptz
+
+  usuario          Usuario              @relation("UsuarioAlertas", fields: [usuarioId], references: [id], onDelete: Cascade)
+  operador         Usuario?             @relation("OperadorAlertas", fields: [atendidaPor], references: [id], onDelete: SetNull)
+  seguimientosGps  SeguimientoGpsVivo[]
+  notificaciones   NotificacionEnviada[]
+
+  @@index([usuarioId])
+  @@index([estado, creadoEn(sort: Desc)])
+  @@map("alertas_sos")
+}
+
+model SeguimientoGpsVivo {
+  id           BigInt    @id @default(autoincrement())
+  alertaId     Int       @map("alerta_id")
+  latitud      Decimal   @db.Decimal(10, 8)
+  longitud     Decimal   @db.Decimal(11, 8)
+  velocidadKmh Decimal?  @default(0.00) @map("velocidad_kmh") @db.Decimal(5, 2)
+  registradoEn DateTime  @default(now()) @map("registrado_en") @db.Timestamptz
+
+  alerta       AlertaSos @relation(fields: [alertaId], references: [id], onDelete: Cascade)
+
+  @@index([alertaId, registradoEn(sort: Desc)])
+  @@map("seguimiento_gps_vivo")
+}
+
+model NotificacionEnviada {
+  id          Int                @id @default(autoincrement())
+  alertaId    Int                @map("alerta_id")
+  autoridadId Int?               @map("autoridad_id")
+  contactoId  Int?               @map("contacto_id")
+  metodo      MetodoNotificacion @default(EMAIL)
+  estadoEnvio EstadoEnvio        @default(PENDIENTE) @map("estado_envio")
+  fechaEnvio  DateTime           @default(now()) @map("fecha_envio") @db.Timestamptz
+
+  alerta      AlertaSos          @relation(fields: [alertaId], references: [id], onDelete: Cascade)
+  autoridad   Autoridad?         @relation(fields: [autoridadId], references: [id], onDelete: SetNull)
+  contacto    ContactoEmergencia? @relation(fields: [contactoId], references: [id], onDelete: SetNull)
+
+  @@index([alertaId])
+  @@map("notificaciones_enviadas")
+}

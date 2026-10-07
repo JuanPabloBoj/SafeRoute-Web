@@ -1,0 +1,22 @@
+<div class="paginator-container">
+  <div class="paginator-info">
+    <p>
+      Página <strong>{{ paginaActual }}</strong> de <strong>{{ totalPaginas }}</strong>
+    </p>
+  </div>
+  
+  <div class="paginator-controls">
+    <button 
+      [disabled]="paginaActual === 1" 
+      (click)="irAPagina(paginaActual - 1)" 
+      class="btn-page">
+      Anterior
+    </button>
+    <button 
+      [disabled]="paginaActual === totalPaginas" 
+      (click)="irAPagina(paginaActual + 1)" 
+      class="btn-page">
+      Siguiente
+    </button>
+  </div>
+</div>
